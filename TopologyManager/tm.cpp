@@ -147,7 +147,7 @@ void handleRequest(char *request, int request_len) {
 			   request_len-(sizeof (request_type) + sizeof (no_publishers) + idx + NODEID_LEN)) ;
 		Bitvector* fid2sub = tm_igraph.calculateFID(tm_igraph.nodeID, sub) ;
 		string response_id = resp_bin_prefix_id + sub;
-		ba->publish_data(response_id, IMPLICIT_RENDEZVOUS, fid2sub, FID_LEN, response, response_len);
+		ba->publish_data(response_id, IMPLICIT_RENDEZVOUS, fid2sub._data, FID_LEN, response, response_len);
 		delete fid2sub ;
 		free(response) ;
 	}
