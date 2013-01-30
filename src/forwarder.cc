@@ -304,13 +304,6 @@ void Forwarder::push(int in_port, Packet *p) {
 		} else {
 			/*all bits were 1 - probably from a link_broadcast strategy--do not forward*/
 		}
-		if(out_links.size() != 1)
-		{
-			click_chatter("more than one out interface") ;
-			p->kill() ;
-			return ;
-		}
-		fe = out_links[0] ;
 		/*check if the packet must be pushed locally*/
 		andVector = FID & gc->iLID;
 		if (andVector == gc->iLID) {
@@ -322,6 +315,14 @@ void Forwarder::push(int in_port, Packet *p) {
 			}
 			return ;
 		}
+		if(out_links.size() != 1)
+		{
+			click_chatter("more than one out interface") ;
+			p->kill() ;
+			return ;
+		}
+		fe = out_links[0] ;
+		
 		for(Vector<CacheEntry*>::iterator iter_cache = cache.begin() ; iter_cache != cache.end() ; iter_cache++)
 		{
 			if( (*iter_cache)->match_filechunk(fileID, chunkID) )
