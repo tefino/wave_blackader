@@ -294,11 +294,11 @@ void Forwarder::push(int in_port, Packet *p) {
 						continue;
 					}
 					out_links.push_back(fe);
-					//WAVE: find the reverse fid
-					if(((*fe->src) == reverse_src) && ((*fe->dst) == reverse_dst))
-					{
-						reverse_FID |= (*fe->LID) ;
-					}
+				}
+				//WAVE: find the reverse fid
+				if(((*fe->src) == reverse_src) && ((*fe->dst) == reverse_dst))
+				{
+					reverse_FID |= (*fe->LID) ;
 				}
 			}
 		} else {
