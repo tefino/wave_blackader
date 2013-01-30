@@ -459,7 +459,7 @@ void Forwarder::push(int in_port, Packet *p) {
 		/*Check all entries in my forwarding table and forward appropriately*/
 		for (int i = 0; i < fwTable.size(); i++) {
 			fe = fwTable[i];
-			andVector = (FID)&(*fe->LID);
+			andVector = (fid2sub)&(*fe->LID);
 			if (andVector == (*fe->LID)) {
 				foundoutput = true ;
 				break ;
