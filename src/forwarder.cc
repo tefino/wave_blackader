@@ -570,7 +570,7 @@ void Forwarder::push(int in_port, Packet *p) {
 		cachesetflag = *(p->data()+14+FID_LEN) ;
 		BABitvector testFID(fid2sub);
 		/*check if the packet must be pushed locally*/
-		andVector = FID & gc->iLID;
+		andVector = fid2sub & gc->iLID;
 		if (andVector == gc->iLID) {
 			p->pull(14 + FID_LEN+1);
 			output(3).push(p);
