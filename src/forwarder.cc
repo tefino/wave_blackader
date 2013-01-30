@@ -318,7 +318,7 @@ void Forwarder::push(int in_port, Packet *p) {
 				p->pull(14 + FID_LEN);
 				payload = p->uniqueify() ;
 				memcpy(payload->data()+1, reverse_FID._data, FID_LEN) ;
-				output(2).push(p);
+				output(2).push(payload);
 			}
 			return ;
 		}
