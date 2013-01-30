@@ -113,9 +113,9 @@ void LocalProxy::push(int in_port, Packet * p) {
 					else
 						tempp = datapacket->clone()->uniqueify() ;
 					/*set the annotation for the to_netlink element*/
-					datapacket->set_anno_u32(0, iter->_lhpointer->id);
+					tempp->set_anno_u32(0, iter->_lhpointer->id);
 					//click_chatter("setting annotation: %d", _localhost->id);
-					output(0).push(tempp);
+					output(1).push(tempp);
 					counter++ ;
 				}
 				idlen -= 2 ;//minus the chunkID and the infoID
@@ -142,9 +142,9 @@ void LocalProxy::push(int in_port, Packet * p) {
 							else
 								tempp = np->clone()->uniqueify() ;
 							/*set the annotation for the to_netlink element*/
-							datapacket->set_anno_u32(0, iter->_lhpointer->id);
+							tempp->set_anno_u32(0, iter->_lhpointer->id);
 							//click_chatter("setting annotation: %d", _localhost->id);
-							output(0).push(tempp);
+							output(1).push(tempp);
 							counter++ ;
 						}
 						return ;
