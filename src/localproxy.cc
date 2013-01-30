@@ -558,9 +558,9 @@ void LocalProxy::handleRVNotification(Packet *p) {
 		unsigned char idlen = 0 ;
 		String fileID ;
 		memcpy(fid2pub._data, p->data()+sizeof(type), FID_LEN) ;
-		memcpy(&noofchunk, p->data()+sizeof(type), sizeof(noofchunk)) ;
-		memcpy(&idlen, p->data()+sizeof(type)+sizeof(noofchunk), sizeof(idlen)) ;
-		fileID = String((const char*)(p->data()+sizeof(type)+sizeof(noofchunk)+sizeof(idlen)),idlen*PURSUIT_ID_LEN) ;
+		memcpy(&noofchunk, p->data()+sizeof(type)+FID_LEN, sizeof(noofchunk)) ;
+		memcpy(&idlen, p->data()+sizeof(type)+FID_LEN+sizeof(noofchunk), sizeof(idlen)) ;
+		fileID = String((const char*)(p->data()+sizeof(type)+FID_LEN+sizeof(noofchunk)+sizeof(idlen)),idlen*PURSUIT_ID_LEN) ;
 		ActiveSubscription *as;
 		as = activeSubscriptionIndex.get(fileID);
 		if (as != activeSubscriptionIndex.default_value()) {
