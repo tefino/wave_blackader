@@ -280,16 +280,6 @@ void Forwarder::push(int in_port, Packet *p) {
 		memcpy(&chunkno, p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN+sizeof(idlen)+idlen*PURSUIT_ID_LEN+PURSUIT_ID_LEN, sizeof(chunkno)) ;
 		memcpy(&totalchunkno, p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN+sizeof(idlen)+idlen*PURSUIT_ID_LEN+PURSUIT_ID_LEN+sizeof(chunkno), sizeof(totalchunkno)) ;
 
-		/*check if the packet must be pushed locally*/
-		andVector = FID & gc->iLID;
-		if (andVector == gc->iLID) {
-			if (gc->use_mac) {
-				p->pull(14 + FID_LEN);
-				output(2).push(p);
-			}
-			return ;
-		}
-
 		testFID.negate();
 		if (!testFID.zero()) {
 			/*Check all entries in my forwarding table and forward appropriately*/
@@ -321,6 +311,17 @@ void Forwarder::push(int in_port, Packet *p) {
 			return ;
 		}
 		fe = out_links[0] ;
+		/*check if the packet must be pushed locally*/
+		andVector = FID & gc->iLID;
+		if (andVector == gc->iLID) {
+			if (gc->use_mac) {
+				p->pull(14 + FID_LEN);
+				payload = p->uniqueify() ;
+				memcpy(payload->data()+1, reverse_FID._data, FID_LEN) ;
+				output(2).push(p);
+			}
+			return ;
+		}
 		for(Vector<CacheEntry*>::iterator iter_cache = cache.begin() ; iter_cache != cache.end() ; iter_cache++)
 		{
 			if( (*iter_cache)->match_filechunk(fileID, chunkID) )
@@ -409,6 +410,7 @@ void Forwarder::push(int in_port, Packet *p) {
 					/*source MAC*/
 					memcpy(payload->data() + MAC_LEN, fe->src->data(), MAC_LEN);
 					data_sent_byte += payload->length() ;
+					memcpy(payload->data()+15+FID_LEN, reverse_FID._data, FID_LEN) ;
                     if( data_sent_byte >= oneGB ){
                         data_sent_byte = data_sent_byte - oneGB ;
                         data_sent_GB++ ;
