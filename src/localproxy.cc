@@ -91,7 +91,7 @@ void LocalProxy::push(int in_port, Packet * p) {
 			chunkID = fullID.substring(fullID.length()-2*PURSUIT_ID_LEN, PURSUIT_ID_LEN) ;
 			infoID = fullID.substring(fullID.length()-PURSUIT_ID_LEN, PURSUIT_ID_LEN) ;
 			WritablePacket* datapacket ;
-			p->pull(sizeof(chunkno)+1+sizeof(totalinfonum)) ;
+			p->pull(sizeof(chunkno)+sizeof(totalinfonum)) ;
 			datapacket = p->uniqueify() ;
 			memcpy(datapacket->data(), &type, 1) ;
 			memcpy(datapacket->data()+1, &idlen, 1) ;
