@@ -637,6 +637,7 @@ void Forwarder::push(int in_port, Packet *p) {
 					if(totalinfonum == (*iter_cache)->chunk_info_cache[chunkID].size())
 					{
 						(*iter_cache)->cached_chunks.push_back(chunkID) ;
+						(*iter_cache)->total_chunk++ ;
 					}
 					if(current_cache_size > total_cache_size)
 					{
@@ -674,10 +675,10 @@ void Forwarder::push(int in_port, Packet *p) {
 				newcacheentry->cached_chunks.clear() ;
 				if( totalinfonum == 1 )
 				{
-					newcacheentry->interface_cached[fe->interface_no] = chunkno ;
 					newcacheentry->cached_chunks.push_back(chunkID) ;
 					newcacheentry->total_chunk = 1 ;
 				}
+				cache.push_back(newcacheentry) ;
 			}
 		}
 		payload = p->uniqueify() ;
