@@ -214,7 +214,7 @@ void LocalProxy::push(int in_port, Packet * p) {
 				break ;
 		}
 	}
-    if (in_port == 2) {
+    else if (in_port == 2) {
         /*from port 2 I receive publications from the network*/
         index = 0;
         /*read the "header"*/
