@@ -72,7 +72,6 @@ void LocalProxy::push(int in_port, Packet * p) {
     String ID, prefixID;
     index = 0;
 	if (in_port == 4){
-		unsigned char type ;
 		unsigned int chunkno ;
 		memcpy(&chunkno, p->data(), sizeof(chunkno)) ;
 		type = *(p->data()+sizeof(chunkno)) ;
@@ -151,23 +150,23 @@ void LocalProxy::push(int in_port, Packet * p) {
 					}
 					chunkno++ ;
 				}
+				//begin to retreive the next chunk
+				unsigned char sub_type = WAVE_RETRIEVE_CONTENT ;
+				unsigned int noofchunk = as->noofchunk ;
+				chunkID = gc->calculatCHUNKID(chunkno) ;
+				WritablePacket *sub_mes ;
+				unsigned int packet_len = FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length()+chunkID.length()+sizeof(chunkno)+sizeof(noofchunk) ;
+				sub_mes = Packet::make(50, NULL, packet_len, 0);
+				memcpy(sub_mes->data(), as->fid2pub._data, FID_LEN) ;
+				memcpy(sub_mes->data()+FID_LEN, &sub_type, sizeof(sub_type)) ;
+				memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type), gc->iLID._data, FID_LEN) ;
+				memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN, &idlen, sizeof(idlen)) ;
+				memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen), fileID.c_str(), fileID.length()) ;
+				memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length(), chunkID.c_str(), chunkID.length()) ;
+				memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length()+chunkID.length(), &chunkno, sizeof(chunkno)) ;
+				memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length()+chunkID.length()+sizeof(chunkno), &noofchunk, sizeof(noofchunk)) ;
+				output(3).push(sub_mes) ;
 			}
-			//begin to retreive the next chunk
-			unsigned char sub_type = WAVE_RETRIEVE_CONTENT ;
-			unsigned int noofchunk = as->noofchunk ;
-			chunkID = gc->calculatCHUNKID(chunkno) ;
-			WritablePacket *sub_mes ;
-			unsigned int packet_len = FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length()+chunkID.length()+sizeof(chunkno)+sizeof(noofchunk) ;
-			sub_mes = Packet::make(50, NULL, packet_len, 0);
-			memcpy(sub_mes->data(), as->fid2pub._data, FID_LEN) ;
-			memcpy(sub_mes->data()+FID_LEN, &sub_type, sizeof(sub_type)) ;
-			memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type), gc->iLID._data, FID_LEN) ;
-			memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN, &idlen, sizeof(idlen)) ;
-			memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen), fileID.c_str(), fileID.length()) ;
-			memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length(), chunkID.c_str(), chunkID.length()) ;
-			memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length()+chunkID.length(), &chunkno, sizeof(chunkno)) ;
-			memcpy(sub_mes->data()+FID_LEN+sizeof(sub_type)+FID_LEN+sizeof(idlen)+fileID.length()+chunkID.length()+sizeof(chunkno), &noofchunk, sizeof(noofchunk)) ;
-			output(3).push(sub_mes) ;
 		}
 
 	} else if (in_port == 3){
