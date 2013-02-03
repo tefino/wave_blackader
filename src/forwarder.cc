@@ -274,7 +274,7 @@ void Forwarder::push(int in_port, Packet *p) {
 		memcpy(reverse_src.data(), p->data(), MAC_LEN) ;
 		memcpy(reverse_dst.data(), p->data()+MAC_LEN, MAC_LEN) ;
 		memcpy(reverse_FID._data, p->data()+14+FID_LEN+sizeof(unsigned char), FID_LEN) ;
-		idlen = *p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN ;
+		idlen = *(p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN) ;
 		fileID = String((const char*)(p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN+sizeof(idlen)), idlen*PURSUIT_ID_LEN) ;
 		chunkID = String((const char*)(p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN+sizeof(idlen))+idlen*PURSUIT_ID_LEN, PURSUIT_ID_LEN) ;
 		memcpy(&chunkno, p->data()+14+FID_LEN+sizeof(unsigned char)+FID_LEN+sizeof(idlen)+idlen*PURSUIT_ID_LEN+PURSUIT_ID_LEN, sizeof(chunkno)) ;
