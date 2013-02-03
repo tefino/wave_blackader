@@ -354,7 +354,7 @@ void Forwarder::push(int in_port, Packet *p) {
 				bool foundoutput = false ;
 				for (int i = 0; i < fwTable.size(); i++) {
 					tfe = fwTable[i];
-					andVector = (fid2sub)&(*tfe->LID);
+					andVector = (reverse_FID)&(*tfe->LID);
 					if (andVector == (*tfe->LID)) {
 						foundoutput = true ;
 						break ;
