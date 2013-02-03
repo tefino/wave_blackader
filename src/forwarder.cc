@@ -372,7 +372,7 @@ void Forwarder::push(int in_port, Packet *p) {
 				{
 					unsigned int packet_len ;
 					unsigned char datatype = WAVE_PUBLISH_DATA ;
-					unsigned int totalinfonum = 0 ;
+					unsigned int totalinfonum = (*iter_cache)->chunk_info_cache[chunkID].size() ;
 					String fullID = fileID+chunkID+iter_info->first ;
 					idlen = fullID.length()/PURSUIT_ID_LEN;
 					packet_len = FID_LEN+1+sizeof(chunkno)+2+(idlen)*PURSUIT_ID_LEN+sizeof(totalinfonum)+\
