@@ -500,7 +500,10 @@ void Forwarder::push(int in_port, Packet *p) {
 				}
 				if( chunkno == (*iter_cache)->total_chunk )
 				{
-					(*iter_cache)->interface_state[fe->interface_no]++ ;
+					if((*iter_cache)->chunk_sent_data[chunkID].size() == totalinfonum){
+						(*iter_cache)->chunk_sent_data[chunkID].clear() ;
+						(*iter_cache)->interface_state[fe->interface_no]++ ;
+					}
 				}
 				p->pull(sizeof(totalchunknum)) ;
 				payload = p->uniqueify() ;
