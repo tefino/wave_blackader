@@ -350,6 +350,21 @@ void Forwarder::push(int in_port, Packet *p) {
 				{
 					(*iter_cache)->interface_state[fe->interface_no]++ ;
 				}
+				ForwardingEntry *tfe;
+				bool foundoutput = false ;
+				for (int i = 0; i < fwTable.size(); i++) {
+					tfe = fwTable[i];
+					andVector = (fid2sub)&(*tfe->LID);
+					if (andVector == (*tfe->LID)) {
+						foundoutput = true ;
+						break ;
+					}
+				}
+				if(!foundoutput)
+				{
+					click_chatter("FW: can not find any out interface") ;
+					return ;
+				}
 				//information update complete, now send back the data
 				//note that the cache router will send all the info data under the scope
 				for( HashTable<String, char*>::iterator iter_info = (*iter_cache)->chunk_info_cache[chunkID].begin() ;\
@@ -376,16 +391,16 @@ void Forwarder::push(int in_port, Packet *p) {
 					newPacket = payload->push_mac_header(14);
 					/*prepare the mac header*/
 					/*destination MAC*/
-					memcpy(newPacket->data(), fe->dst->data(), MAC_LEN);
+					memcpy(newPacket->data(), tfe->dst->data(), MAC_LEN);
 					/*source MAC*/
-					memcpy(newPacket->data() + MAC_LEN, fe->src->data(), MAC_LEN);
+					memcpy(newPacket->data() + MAC_LEN, tfe->src->data(), MAC_LEN);
 					memcpy(newPacket->data() + MAC_LEN + MAC_LEN, &data_type, 2);
 					data_sent_byte += newPacket->length() ;
                     if( data_sent_byte >= oneGB ){
                         data_sent_byte = data_sent_byte - oneGB ;
                         data_sent_GB++ ;
                     }
-					output(fe->port).push(newPacket);
+					output(tfe->port).push(newPacket);
 					return ;
 				}
 			}
