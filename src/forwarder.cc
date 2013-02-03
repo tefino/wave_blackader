@@ -360,17 +360,17 @@ void Forwarder::push(int in_port, Packet *p) {
 					unsigned int totalinfonum = 0 ;
 					String fullID = fileID+chunkID+iter_info->first ;
 					idlen = fullID.length()/PURSUIT_ID_LEN;
-					packet_len = 14+FID_LEN+1+sizeof(chunkno)+2+(idlen)*PURSUIT_ID_LEN+sizeof(totalinfonum)+\
+					packet_len = FID_LEN+1+sizeof(chunkno)+2+(idlen)*PURSUIT_ID_LEN+sizeof(totalinfonum)+\
 								 (*iter_cache)->chunk_info_length[chunkID][iter_info->first] ;
-					payload = Packet::make(0,NULL,packet_len,0) ;
-					memcpy(payload->data()+14, reverse_FID._data, FID_LEN) ;
-					memcpy(payload->data()+14+FID_LEN, &cachesetflag, 1) ;
-					memcpy(payload->data()+15+FID_LEN, &chunkno, sizeof(chunkno)) ;
-					memcpy(payload->data()+15+FID_LEN+sizeof(chunkno), &datatype, 1) ;
-					memcpy(payload->data()+15+FID_LEN+sizeof(chunkno)+1, &idlen, 1) ;
-					memcpy(payload->data()+15+FID_LEN+sizeof(chunkno)+2, fullID.c_str(), fullID.length()) ;
-					memcpy(payload->data()+15+FID_LEN+sizeof(chunkno)+2+fullID.length(), &totalinfonum, sizeof(totalinfonum)) ;
-					memcpy(payload->data()+15+FID_LEN+sizeof(chunkno)+2+fullID.length()+sizeof(totalinfonum),\
+					payload = Packet::make(20,NULL,packet_len,0) ;
+					memcpy(payload->data(), reverse_FID._data, FID_LEN) ;
+					memcpy(payload->data()+FID_LEN, &cachesetflag, 1) ;
+					memcpy(payload->data()+1+FID_LEN, &chunkno, sizeof(chunkno)) ;
+					memcpy(payload->data()+1+FID_LEN+sizeof(chunkno), &datatype, 1) ;
+					memcpy(payload->data()+1+FID_LEN+sizeof(chunkno)+1, &idlen, 1) ;
+					memcpy(payload->data()+1+FID_LEN+sizeof(chunkno)+2, fullID.c_str(), fullID.length()) ;
+					memcpy(payload->data()+1+FID_LEN+sizeof(chunkno)+2+fullID.length(), &totalinfonum, sizeof(totalinfonum)) ;
+					memcpy(payload->data()+1+FID_LEN+sizeof(chunkno)+2+fullID.length()+sizeof(totalinfonum),\
 						   iter_info->second, (*iter_cache)->chunk_info_length[chunkID][iter_info->first]) ;
 
 					newPacket = payload->push_mac_header(14);
