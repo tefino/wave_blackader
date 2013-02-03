@@ -540,6 +540,7 @@ void Forwarder::push(int in_port, Packet *p) {
 		cache.push_back(newcacheentry) ;
 		p->pull(sizeof(totalchunknum)) ;
 		payload = p->uniqueify() ;
+		cachesetflag = 1 ;
 		memcpy(payload->data(), fid2sub._data, FID_LEN) ;
 		memcpy(payload->data()+FID_LEN, &cachesetflag, 1) ;
 		memcpy(payload->data()+FID_LEN+1, &chunkno, sizeof(chunkno)) ;
