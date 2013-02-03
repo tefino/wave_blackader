@@ -396,13 +396,13 @@ void Forwarder::push(int in_port, Packet *p) {
 					memcpy(newPacket->data() + MAC_LEN, tfe->src->data(), MAC_LEN);
 					memcpy(newPacket->data() + MAC_LEN + MAC_LEN, &data_type, 2);
 					data_sent_byte += newPacket->length() ;
-                    if( data_sent_byte >= oneGB ){
-                        data_sent_byte = data_sent_byte - oneGB ;
-                        data_sent_GB++ ;
-                    }
+		                    if( data_sent_byte >= oneGB ){
+		                        data_sent_byte = data_sent_byte - oneGB ;
+		                        data_sent_GB++ ;
+		                    }
 					output(tfe->port).push(newPacket);
-					return ;
 				}
+				return ;
 			}
 		}
 		if (!testFID.zero()) {
