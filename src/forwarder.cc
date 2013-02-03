@@ -484,12 +484,16 @@ void Forwarder::push(int in_port, Packet *p) {
 				{
 					cachesetflag = 1 ;
 					if((*iter_cache)->chunk_sent_data[chunkID].size() == totalinfonum)
+					{
 						(*iter_cache)->interface_cached[fe->interface_no] = chunkno ;
+						(*iter_cache)->chunk_sent_data[chunkID].clear() ;
+					}
 				}
 				if( (*iter_cache)->interface_cached[fe->interface_no] >= chunkno )
 				{
 					cachesetflag = 1 ;
 					if((*iter_cache)->chunk_sent_data[chunkID].size() == totalinfonum){
+						(*iter_cache)->chunk_sent_data[chunkID].clear() ;
 						(*iter_cache)->interface_cached[fe->interface_no] = chunkno ;
 						(*iter_cache)->interface_state[fe->interface_no] = (int) (log(chunkno)/log((*iter_cache)->CMW_base)) ;
 					}
@@ -814,9 +818,9 @@ bool CacheEntry::match_filechunk(String& _fileID, String& _chunkID)
 {
 	if( _fileID == fileID )
 	{
-		for( int i = 0 ; i < chunkIDs.size() ; i++)
+		for( int i = 0 ; i < cached_chunks.size() ; i++)
 		{
-			if(_chunkID == chunkIDs[i])
+			if(_chunkID == cached_chunks[i])
 				return true ;
 		}
 	}
