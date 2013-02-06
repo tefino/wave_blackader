@@ -182,6 +182,7 @@ void client_process(int i)
 				cout << "STOP_PUBLISH: " << chararray_to_hex(ev.id) << endl;
 				break;
 			case WAVE_PUBLISH_DATA:
+				item_num++ ;
 				cout << "PUBLISHED_DATA: " << chararray_to_hex(ev.id) << endl;
 				cout << "data size: " << ev.data_len << endl;
 				break ;
