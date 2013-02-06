@@ -186,7 +186,7 @@ int main(int argc, char* argv[]) {
 			case WAVE_START_PUBLISH:
 				cout << "WAVE_START_PUBLISH: " << chararray_to_hex(ev.id) << endl;
 					ba->wave_publish_data(ev.id, (void*)ev.fid2sub._data, FID_LEN, payload, payload_size,\
-						ev.chunkno, ev.totalchunknum, SEGSIZE)
+						ev.chunkno, ev.totalchunknum, SEGSIZE) ;
 				break;
 			case STOP_PUBLISH:
 				cout << "STOP_PUBLISH: " << chararray_to_hex(ev.id) << endl;
