@@ -39,6 +39,13 @@ int Parser::parseConfiguration() {
 
 int Parser::getGlobalDomainParameters() {
     try {
+        dm->cache_size = cfg.lookup("CACHE_SIZE");
+        //cout << "BLACKADDER_ID_LENGTH: " << ba_id_len << endl;
+    } catch (const SettingNotFoundException &nfex) {
+        cerr << "mandatory option CACHE_SIZE is missing" << endl;
+        return -1;
+    }
+    try {
         dm->ba_id_len = cfg.lookup("BLACKADDER_ID_LENGTH");
         //cout << "BLACKADDER_ID_LENGTH: " << ba_id_len << endl;
     } catch (const SettingNotFoundException &nfex) {
