@@ -506,6 +506,7 @@ bool LocalProxy::storeActiveSubscription(LocalHost *_subscriber, String &fullID,
             as->subscribers.find_insert(LocalHostSetItem(_subscriber));
             /*update the subscribed remote scopes for this publsher*/
             _subscriber->activeSubscriptions.find_insert(StringSetItem(fullID));
+            return true ;
             //click_chatter("LocalProxy: Active Subscription %s exists...updated for local subscriber %s", fullID.quoted_hex().c_str(), _subscriber->localHostID.c_str());
         } else {
             //click_chatter("LocalProxy: error while trying to update list of subscribers for Active Subscription %s..strategy mismatch", as->fullID.quoted_hex().c_str());
