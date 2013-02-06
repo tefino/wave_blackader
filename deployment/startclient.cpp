@@ -3,7 +3,7 @@
 
 int main(int argc, char* arg[])
 {
-	char cmd[100] ;
+	char cmd[1000] ;
 
 	for(int i = 71 ; i <= 75 ; i++)
 	{
