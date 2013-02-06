@@ -1,6 +1,6 @@
 all:
-	$(CXX) $(CXXFLAGS) publisher.cpp  -o publisher $(LDFLAGS) -lblackadder -lpthread
-	$(CXX) $(CXXFLAGS) subscriber.cpp -o subscriber $(LDFLAGS) -lblackadder -lpthread
+	$(CXX) $(CXXFLAGS) wave_publisher.cpp  -o publisher $(LDFLAGS) -lblackadder -lpthread
+	$(CXX) $(CXXFLAGS) wave_subscriber.cpp -o subscriber $(LDFLAGS) -lblackadder -lpthread
 
 clean:
-	rm -f publisher subscriber 
+	rm -f wave_publisher wave_subscriber 
