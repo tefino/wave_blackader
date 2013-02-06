@@ -164,7 +164,7 @@ void Forwarder::cleanup(CleanupStage stage) {
     fprintf(ft, "total_cache_number_chunk: %d\n", cache.size()) ;
     for( int i = 0 ; i < cache.size() ; i++)
     {
-        fprintf(ft, "%s\n", cache[i]->cached_chunks[0].quoted_hex().c_str()) ;
+        fprintf(ft, "%s\n", cache[i]->fileID.quoted_hex().c_str()) ;
     }
 	click_chatter("Forwarder: Cleaned Up!");
 }
@@ -327,6 +327,12 @@ void Forwarder::push(int in_port, Packet *p) {
 		{
 			if( (*iter_cache)->match_filechunk(fileID, chunkID) )
 			{
+				cache_hit++ ;
+                            	if(cache_hit == Billion)
+                            	{
+                                	cache_hit = 0 ;
+                                	cache_hit_Bill++ ;
+                            	}
 				unsigned char cachesetflag = 0 ;
 				//update cache information according to the algorithm
 				//and send back the data
@@ -402,6 +408,9 @@ void Forwarder::push(int in_port, Packet *p) {
 		                    }
 					output(tfe->port).push(newPacket);
 				}
+				CacheEntry* ce = (*iter_cache) ;
+                            	cache.erase(iter_cache) ;
+                            	cache.push_back(ce) ;
 				return ;
 			}
 		}
