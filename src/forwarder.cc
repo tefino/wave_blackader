@@ -651,11 +651,10 @@ void Forwarder::push(int in_port, Packet *p) {
 			{
 				if( (*iter_cache)->match_file(fileID) )
 				{
-
+					cachefound = true ;
 					tempcache = (*iter_cache)->chunk_info_cache[chunkID].get(infoID) ;
 					if( tempcache != (*iter_cache)->chunk_info_cache[chunkID].default_value() )
 					{
-						cachefound = true ;
 						break ;
 					}
 
