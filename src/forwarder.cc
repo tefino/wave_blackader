@@ -698,6 +698,7 @@ void Forwarder::push(int in_port, Packet *p) {
 					newcacheentry->interface_cached[fwTable[i]->interface_no] = 0 ;
 				}
 				newcacheentry->total_len = data_len ;
+				current_cache_size += data_len ;
 				tempcache = (char*)malloc(data_len) ;
 				memcpy(tempcache, p->data()+14+FID_LEN+3+sizeof(chunkno)+fullID.length()+sizeof(totalinfonum), data_len) ;
 				newcacheentry->chunk_info_cache[chunkID][infoID] = tempcache ;
@@ -710,6 +711,20 @@ void Forwarder::push(int in_port, Packet *p) {
 					newcacheentry->total_chunk = 1 ;
 				}
 				cache.push_back(newcacheentry) ;
+				if(current_cache_size > total_cache_size)
+				{
+					//cache overload, remove the least recently used one
+					cache_replace++ ;
+					if(cache_replace == Billion)
+					{
+						cache_replace = 0 ;
+						cache_replace_Bill++ ;
+					}
+					CacheEntry* ce = cache[0] ;
+					current_cache_size = current_cache_size - cache[0]->total_len ;
+					cache.erase(cache.begin()) ;
+					delete ce ;
+				}
 			}
 		}
 		payload = p->uniqueify() ;
